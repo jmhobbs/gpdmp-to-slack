@@ -41,7 +41,7 @@ type GPDMPAPI struct {
 	Path string
 }
 
-func (gp *GPDMPAPI) Watch(updates chan Song, done chan bool, debounce_seconds time.Duration) {
+func (gp *GPDMPAPI) Watch(updates chan Song, done chan bool, debounce time.Duration) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Fatal(err)
@@ -55,7 +55,7 @@ func (gp *GPDMPAPI) Watch(updates chan Song, done chan bool, debounce_seconds ti
 			select {
 			case event := <-watcher.Events:
 				if event.Op&fsnotify.Write == fsnotify.Write {
-					if time.Now().After(lastRead.Add(time.Second * debounce_seconds)) {
+					if time.Now().After(lastRead.Add(debounce)) {
 						lastRead = time.Now()
 						f, err := os.Open(event.Name)
 						if err != nil {
@@ -72,7 +72,9 @@ func (gp *GPDMPAPI) Watch(updates chan Song, done chan bool, debounce_seconds ti
 							continue
 						}
 
-						updates <- pb.Song
+						if pb.Playing {
+							updates <- pb.Song
+						}
 					}
 				}
 			case err := <-watcher.Errors:
