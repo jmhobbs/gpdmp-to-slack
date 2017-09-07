@@ -1,10 +1,3 @@
-# Idea
+This little app takes the status from [Google Play Music Desktop Player](https://www.googleplaymusicdesktopplayer.com/) and updates your [Slack](https://slack.com/features) status.
 
-  1. Watch GPDMP JSON for song names
-  2. Update Slack status on changes
-  3. If paused for too long, or no change for too long, revert Slack
-  4. Avoid overwriting status we didn't set somehow
-
-# Slack
-
-https://api.slack.com/docs/presence-and-status#custom_status
+![Demo](http://static.velvetcache.org.s3.amazonaws.com/temp/slack-gpmdp-demo.gif "Demo!")
